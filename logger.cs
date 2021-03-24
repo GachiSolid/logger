@@ -7,6 +7,46 @@ namespace logger
 {
     class Logger : ILog
     {
+        Dictionary<string, List<string>> errors = new Dictionary<string, List<string>>();
+        Dictionary<string, List<string>> warnings = new Dictionary<string, List<string>>();
+        bool CreateDict(string message, bool isError)
+        {
+            string date = String.Format("{0:dd-MM-yyyy}", DateTime.Now);
+            if (!isError)
+            {
+                try
+                {
+                    if (!warnings[date].Contains(message)) warnings[date].Add(message);
+                    else return false;
+                }
+                catch (KeyNotFoundException)
+                {
+                    List<string> error = new List<string>
+                {
+                    message
+                };
+                    warnings.Add(date, error);
+                }
+                return true;
+            }
+            else
+            {
+                try
+                {
+                    if (!errors[date].Contains(message)) errors[date].Add(message);
+                    else return false;
+                }
+                catch (KeyNotFoundException)
+                {
+                    List<string> error = new List<string>
+                {
+                    message
+                };
+                    errors.Add(date, error);
+                }
+                return true;
+            }
+        }
         string CreatePath (string type)
         {
             string date = String.Format("{0:dd-MM-yyyy}", DateTime.Now);
@@ -47,6 +87,7 @@ namespace logger
 
         public void Error(string message)
         {
+            CreateDict(message,true);
             string text = String.Format("{0:dd-MM-yyyy hh:mm:ss} (ERROR): {1}", DateTime.Now, message);
             string path = CreatePath("error");
             CreateLog(path, text);
@@ -54,6 +95,7 @@ namespace logger
 
         public void Error(string message, Exception e)
         {
+            CreateDict(e.Message,true);
             string text = String.Format("{0:dd-MM-yyyy hh:mm:ss} (ERROR): {1} {2}", DateTime.Now, message, e.Message);
             string path = CreatePath("error");
             CreateLog(path, text);
@@ -61,6 +103,7 @@ namespace logger
 
         public void Error(Exception ex)
         {
+            CreateDict(ex.Message, true);
             string text = String.Format("{0:dd-MM-yyyy hh:mm:ss} (ERROR): {1}", DateTime.Now, ex.Message);
             string path = CreatePath("error");
             CreateLog(path, text);
@@ -68,26 +111,10 @@ namespace logger
 
         public void ErrorUnique(string message, Exception e)
         {
-            string dir = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + @"\dir";
-            Directory.CreateDirectory(dir);
-            string path = dir + @"\uniqueerrors.txt";
-            string date = String.Format("{0:dd-MM-yyyy}", DateTime.Now);
-            try
+            if(CreateDict(e.Message, true))
             {
-                string contents = File.ReadAllText(path);
-                if (!contents.Contains(date))
-                {
-                    CreateLog(path, date);
-                    path = CreatePath("error");
-                    string text = String.Format("{0:dd-MM-yyyy hh:mm:ss} (ERROR): {1} {2}", DateTime.Now, message, e.Message);
-                    CreateLog(path, text);
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                CreateLog(path, date);
-                path = CreatePath("error");
                 string text = String.Format("{0:dd-MM-yyyy hh:mm:ss} (ERROR): {1} {2}", DateTime.Now, message, e.Message);
+                string path = CreatePath("error");
                 CreateLog(path, text);
             }
         }
@@ -141,6 +168,7 @@ namespace logger
 
         public void Warning(string message)
         {
+            CreateDict(message, false);
             string text = String.Format("{0:dd-MM-yyyy hh:mm:ss} (WARNING): {1}", DateTime.Now, message);
             string path = CreatePath("warning");
             CreateLog(path, text);
@@ -148,6 +176,7 @@ namespace logger
 
         public void Warning(string message, Exception e)
         {
+            CreateDict(e.Message, false);
             string text = String.Format("{0:dd-MM-yyyy hh:mm:ss} (WARNING): {1} {2}", DateTime.Now, message, e.Message);
             string path = CreatePath("warning");
             CreateLog(path, text);
@@ -155,26 +184,10 @@ namespace logger
 
         public void WarningUnique(string message)
         {
-            string dir = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + @"\dir";
-            Directory.CreateDirectory(dir);
-            string path = dir + @"\uniquewarnings.txt";
-            string date = String.Format("{0:dd-MM-yyyy}", DateTime.Now);
-            try
+            if (CreateDict(message, false))
             {
-                string contents = File.ReadAllText(path);
-                if (!contents.Contains(date))
-                {
-                    CreateLog(path, date);
-                    path = CreatePath("warning");
-                    string text = String.Format("{0:dd-MM-yyyy hh:mm:ss} (WARNING): {1}", DateTime.Now, message);
-                    CreateLog(path, text);
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                CreateLog(path, date);
-                path = CreatePath("warning");
                 string text = String.Format("{0:dd-MM-yyyy hh:mm:ss} (WARNING): {1}", DateTime.Now, message);
+                string path = CreatePath("warning");
                 CreateLog(path, text);
             }
         }
