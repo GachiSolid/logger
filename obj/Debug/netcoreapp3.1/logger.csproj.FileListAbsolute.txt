@@ -1,0 +1,13 @@
+D:\Документы\Bars\logger\bin\Debug\netcoreapp3.1\logger.exe
+D:\Документы\Bars\logger\bin\Debug\netcoreapp3.1\logger.deps.json
+D:\Документы\Bars\logger\bin\Debug\netcoreapp3.1\logger.runtimeconfig.json
+D:\Документы\Bars\logger\bin\Debug\netcoreapp3.1\logger.runtimeconfig.dev.json
+D:\Документы\Bars\logger\bin\Debug\netcoreapp3.1\logger.dll
+D:\Документы\Bars\logger\bin\Debug\netcoreapp3.1\logger.pdb
+D:\Документы\Bars\logger\obj\Debug\netcoreapp3.1\logger.csprojAssemblyReference.cache
+D:\Документы\Bars\logger\obj\Debug\netcoreapp3.1\logger.AssemblyInfoInputs.cache
+D:\Документы\Bars\logger\obj\Debug\netcoreapp3.1\logger.AssemblyInfo.cs
+D:\Документы\Bars\logger\obj\Debug\netcoreapp3.1\logger.csproj.CoreCompileInputs.cache
+D:\Документы\Bars\logger\obj\Debug\netcoreapp3.1\logger.dll
+D:\Документы\Bars\logger\obj\Debug\netcoreapp3.1\logger.pdb
+D:\Документы\Bars\logger\obj\Debug\netcoreapp3.1\logger.genruntimeconfig.cache
