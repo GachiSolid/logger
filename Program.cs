@@ -106,7 +106,7 @@ namespace logger
             }
             catch (AbandonedMutexException e)
             {
-                log.ErrorUnique("Произошла ошибка:", e);
+                log.ErrorUnique("Произошла уникальная ошибка:", e);
             }
             catch (Exception e)
             {
@@ -182,9 +182,11 @@ namespace logger
         }
         static private void SystemInfo(Logger log)
         {
-            Dictionary<object, object> properties = new Dictionary<object, object>();
-            properties.Add("CPU", "Good");
-            properties.Add("GPU", "Bad");
+            Dictionary<object, object> properties = new Dictionary<object, object>
+            {
+                { "CPU", "Good" },
+                { "GPU", "Bad" }
+            };
             log.SystemInfo("Системная информация:", properties);
         }
     }

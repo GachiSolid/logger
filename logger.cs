@@ -68,10 +68,25 @@ namespace logger
 
         public void ErrorUnique(string message, Exception e)
         {
-            string path = CreatePath("error");
-            string contents = File.ReadAllText(path);
-            if (!contents.Contains(e.Message))
+            string dir = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + @"\dir";
+            Directory.CreateDirectory(dir);
+            string path = dir + @"\uniqueerrors.txt";
+            string date = String.Format("{0:dd-MM-yyyy}", DateTime.Now);
+            try
             {
+                string contents = File.ReadAllText(path);
+                if (!contents.Contains(date))
+                {
+                    CreateLog(path, date);
+                    path = CreatePath("error");
+                    string text = String.Format("{0:dd-MM-yyyy hh:mm:ss} (ERROR): {1} {2}", DateTime.Now, message, e.Message);
+                    CreateLog(path, text);
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                CreateLog(path, date);
+                path = CreatePath("error");
                 string text = String.Format("{0:dd-MM-yyyy hh:mm:ss} (ERROR): {1} {2}", DateTime.Now, message, e.Message);
                 CreateLog(path, text);
             }
@@ -140,11 +155,26 @@ namespace logger
 
         public void WarningUnique(string message)
         {
-            string path = CreatePath("warning");
-            string contents = File.ReadAllText(path);
-            if (!contents.Contains(message))
+            string dir = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + @"\dir";
+            Directory.CreateDirectory(dir);
+            string path = dir + @"\uniquewarnings.txt";
+            string date = String.Format("{0:dd-MM-yyyy}", DateTime.Now);
+            try
             {
-                string text = String.Format("{0:dd-MM-yyyy hh:mm:ss} (ERROR): {1}", DateTime.Now, message);
+                string contents = File.ReadAllText(path);
+                if (!contents.Contains(date))
+                {
+                    CreateLog(path, date);
+                    path = CreatePath("warning");
+                    string text = String.Format("{0:dd-MM-yyyy hh:mm:ss} (WARNING): {1}", DateTime.Now, message);
+                    CreateLog(path, text);
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                CreateLog(path, date);
+                path = CreatePath("warning");
+                string text = String.Format("{0:dd-MM-yyyy hh:mm:ss} (WARNING): {1}", DateTime.Now, message);
                 CreateLog(path, text);
             }
         }
